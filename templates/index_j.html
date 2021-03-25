@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 align="center">Works Log</h1>
+{% for job in jobs%}
+<h4>Action # {{job.id}}</h4>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col" class="table-dark">Title of activity</th>
+      <th scope="col" class="table-dark">Team leader</th>
+      <th scope="col" class="table-dark">Duration</th>
+      <th scope="col" class="table-dark">List of collaborators</th>
+      <th scope="col" class="table-dark">Hazard category</th>
+      <th scope="col" class="table-dark">Is finished</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{job.job}}</td>
+      <td>{{job.user}}</td>
+      <td>{{job.work_size}} hours</td>
+      <td>{{job.collaborators}}</td>
+      <td>{{job.categories[-1].hazard_description}}</td>
+      {% if not job.is_finished%}
+      <td class="table-danger">Is not finished</td>
+      {% else %}
+      <td class="table-success">Is finished</td>
+      {% endif %}
+    </tr>
+  </tbody>
+</table>
+{% if current_user.is_authenticated and (current_user == job.user or current_user.id == 1)%}
+    <div>
+        <a href="/jobs/{{ job.id }}" class="btn btn-warning">
+            Изменить
+        </a>
+        <a href="/jobs_delete/{{ job.id }}" class="btn btn-danger">
+            Удалить
+        </a>
+    </div>{% endif %}
+{% endfor %}
+{% endblock %}
